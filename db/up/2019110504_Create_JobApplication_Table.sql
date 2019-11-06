@@ -6,6 +6,7 @@ SET ANSI_PADDING ON
 GO
 CREATE TABLE [JobApplication](
 	[JobApplicationId] [int] IDENTITY(1,1) NOT NULL,
+	[UserId] [int] NOT NULL,
 	[Position] [varchar](100) NOT NULL,
 	[Company] [varchar](50) NOT NULL,
 	[RecruiterId] [int] NULL,
@@ -20,11 +21,15 @@ CREATE TABLE [JobApplication](
 
 GO
 
-ALTER TABLE [JobApplication]  WITH CHECK ADD  CONSTRAINT [FK_dbo.JobApplication_dbo.ApplicationStatus_ApplicationStatusId] FOREIGN KEY([ApplicationStatusId])
+ALTER TABLE [JobApplication]  WITH CHECK ADD  CONSTRAINT [FK_JobApplication_IdentityUser] FOREIGN KEY([UserId])
+REFERENCES [IdentityUser] ([Id])
+GO
+
+ALTER TABLE [JobApplication]  WITH CHECK ADD  CONSTRAINT [FK_JobApplication_ApplicationStatus] FOREIGN KEY([ApplicationStatusId])
 REFERENCES [ApplicationStatus] ([ApplicationStatusId])
 GO
 
-ALTER TABLE [JobApplication]  WITH CHECK ADD  CONSTRAINT [FK_dbo.JobApplication_dbo.Recruiter_RecruiterId] FOREIGN KEY([RecruiterId])
+ALTER TABLE [JobApplication]  WITH CHECK ADD  CONSTRAINT [FK_JobApplication_Recruiter] FOREIGN KEY([RecruiterId])
 REFERENCES [Recruiter] ([RecruiterId])
 GO
 

@@ -6,6 +6,7 @@ SET ANSI_PADDING ON
 GO
 CREATE TABLE [Recruiter](
 	[RecruiterId] [int] IDENTITY(1,1) NOT NULL,
+	[UserId] [int] NOT NULL,
 	[Name] [varchar](50) NOT NULL,
 	[Phone] [varchar](20) NULL,
 	[Email] [varchar](20) NULL
@@ -16,5 +17,10 @@ CREATE TABLE [Recruiter](
 ) ON [PRIMARY]
 
 GO
+
+ALTER TABLE [Recruiter]  WITH CHECK ADD  CONSTRAINT [FK_Recruiter_IdentityUser] FOREIGN KEY([UserId])
+REFERENCES [IdentityUser] ([Id])
+GO
+
 SET ANSI_PADDING OFF
 GO

@@ -6,6 +6,7 @@ SET ANSI_PADDING ON
 GO
 CREATE TABLE [Followup](
 	[FollowupId] [int] IDENTITY(1,1) NOT NULL,
+	[UserId] [int] NOT NULL,
 	[ActivityDate] [datetime] NOT NULL,
 	[JobApplicationId] [int] NOT NULL,
 	[FollowupDescription] [varchar](MAX) NOT NULL
@@ -17,7 +18,11 @@ CREATE TABLE [Followup](
 
 GO
 
-ALTER TABLE [Followup]  WITH CHECK ADD  CONSTRAINT [FK_dbo.Followup_dbo.JobApplication_JobApplicationId] FOREIGN KEY([JobApplicationId])
+ALTER TABLE [Followup]  WITH CHECK ADD  CONSTRAINT [FK_Followup_IdentityUser] FOREIGN KEY([UserId])
+REFERENCES [IdentityUser] ([Id])
+GO
+
+ALTER TABLE [Followup]  WITH CHECK ADD  CONSTRAINT [FK_Followup_JobApplication] FOREIGN KEY([JobApplicationId])
 REFERENCES [JobApplication] ([JobApplicationId])
 GO
 
