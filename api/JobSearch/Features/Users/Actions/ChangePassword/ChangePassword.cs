@@ -33,12 +33,10 @@
     public class Handler : IRequestHandler<Request, Response>
     {
         private readonly UserManager<DapperIdentityUser> _userManager;
-        private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public Handler(UserManager<DapperIdentityUser> userManager, IHttpContextAccessor httpContextAccessor)
+        public Handler(UserManager<DapperIdentityUser> userManager)
         {
             _userManager = userManager;
-            _httpContextAccessor = httpContextAccessor;
         }
 
         public async Task<Response> Handle(Request request, CancellationToken cancellationToken)

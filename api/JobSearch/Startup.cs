@@ -5,6 +5,8 @@ using Microsoft.AspNetCore.Mvc;
 namespace JobSearch
 {
     using System;
+    using System.Data;
+    using System.Data.SqlClient;
     using System.IdentityModel.Tokens.Jwt;
     using System.IO;
     using System.Linq;
@@ -138,6 +140,7 @@ namespace JobSearch
                 "Sendgrid API",
                 HealthStatus.Degraded);
 
+            services.AddTransient<IDbConnection>(_ => new SqlConnection(_configuration["ConnectionString"]));
             services.AddTransient<TokenGenerator>();
             services.AddTransient<IEmailSender, EmailSender>();
             services.AddTransient<IValidatorInterceptor, ValidatorInterceptor>();
