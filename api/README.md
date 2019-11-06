@@ -1,6 +1,6 @@
 # JobSearch
 
-This is the JobSearch template, the project from which future API projects should be created.
+This is the JobSearch API.
 
 ## Build requirements
 
