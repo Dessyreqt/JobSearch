@@ -1,4 +1,4 @@
-﻿namespace JobSearch.Features.Recruiters.GetRecruiterById
+﻿namespace JobSearch.Features.Recruiters.GetRecruiter
 {
     using System.Data;
     using System.IO;

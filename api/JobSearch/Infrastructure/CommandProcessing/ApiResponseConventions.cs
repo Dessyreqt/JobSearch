@@ -46,7 +46,7 @@
         {
         }
 
-        [ProducesResponseType(204)]
+        [ProducesResponseType(200)]
         [ProducesResponseType(typeof(ErrorResponse), 404)]
         [ProducesResponseType(typeof(ErrorResponse), 400)]
         [ProducesDefaultResponseType(typeof(ErrorResponse))]
@@ -59,7 +59,7 @@
         {
         }
 
-        [ProducesResponseType(204)]
+        [ProducesResponseType(200)]
         [ProducesResponseType(typeof(ErrorResponse), 404)]
         [ProducesResponseType(typeof(ErrorResponse), 400)]
         [ProducesDefaultResponseType(typeof(ErrorResponse))]
@@ -72,7 +72,7 @@
         {
         }
 
-        [ProducesResponseType(204)]
+        [ProducesResponseType(200)]
         [ProducesResponseType(typeof(ErrorResponse), 404)]
         [ProducesResponseType(typeof(ErrorResponse), 400)]
         [ProducesDefaultResponseType(typeof(ErrorResponse))]
