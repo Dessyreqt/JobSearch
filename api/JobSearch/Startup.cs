@@ -147,6 +147,7 @@ namespace JobSearch
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
             services.AddScoped(typeof(IPipelineBehavior<,>), typeof(PerformanceLoggingBehavior<,>));
+            services.AddScoped(typeof(IPipelineBehavior<,>), typeof(AuthRequestUserBehavior<,>));
             services.AddMediatR(typeof(Startup));
         }
 
@@ -170,7 +171,7 @@ namespace JobSearch
                 app.UseSwaggerUI(
                     c =>
                     {
-                        c.SwaggerEndpoint("/swagger/v1/swagger.json", "Base API V3");
+                        c.SwaggerEndpoint("/swagger/v1/swagger.json", "JobSearch API v1");
                     });
             }
 

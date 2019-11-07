@@ -9,7 +9,7 @@ CREATE TABLE [Recruiter](
 	[UserId] [int] NOT NULL,
 	[Name] [varchar](50) NOT NULL,
 	[Phone] [varchar](20) NULL,
-	[Email] [varchar](20) NULL
+	[Email] [varchar](200) NULL
  CONSTRAINT [PK_Recruiter] PRIMARY KEY CLUSTERED 
 (
 	[RecruiterId] ASC

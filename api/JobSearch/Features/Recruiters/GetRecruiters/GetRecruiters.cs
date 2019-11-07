@@ -5,25 +5,18 @@
     using System.Linq;
     using System.Threading;
     using System.Threading.Tasks;
-    using Dapper;
+    using JobSearch.Domain;
     using MediatR;
 
-    public class Request : AuthRequest, IRequest<List<Response>>
+    public class Request : AuthRequest, IRequest<List<RecruiterResponse>>
     {
-    }
-
-    public class Response
-    {
-        public string Name { get; set; }
-        public string Phone { get; set; }
-        public string Email { get; set; }
     }
 
     public class Validation : AuthValidator<Request>
     {
     }
 
-    public class Handler : IRequestHandler<Request, List<Response>>
+    public class Handler : IRequestHandler<Request, List<RecruiterResponse>>
     {
         private readonly IDbConnection _connection;
 
@@ -32,13 +25,12 @@
             _connection = connection;
         }
 
-        public async Task<List<Response>> Handle(Request request, CancellationToken cancellationToken)
+        public Task<List<RecruiterResponse>> Handle(Request request, CancellationToken cancellationToken)
         {
-            var query = "select * from [Recruiter] where UserId = @UserId";
             var user = request.GetUser();
-            var retVal = (await _connection.QueryAsync<Response>(query, new { UserId = user.Id })).ToList();
+            var response = _connection.GetList<Recruiter>("UserId = @UserId", new { UserId = user.Id }).Select(RecruiterResponse.MapFrom).ToList();
 
-            return retVal;
+            return Task.Run(() => response, cancellationToken);
         }
     }
 }
