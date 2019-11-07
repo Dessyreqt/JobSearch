@@ -12,10 +12,6 @@
     {
     }
 
-    public class Validation : AuthValidator<Request>
-    {
-    }
-
     public class Handler : IRequestHandler<Request, List<RecruiterResponse>>
     {
         private readonly IDbConnection _connection;

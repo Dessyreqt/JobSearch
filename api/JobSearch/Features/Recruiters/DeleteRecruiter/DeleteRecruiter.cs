@@ -1,4 +1,4 @@
-﻿namespace JobSearch.Features.Recruiters.GetRecruiter
+﻿namespace JobSearch.Features.Recruiters.DeleteRecruiter
 {
     using System.Data;
     using System.IO;
@@ -7,11 +7,15 @@
     using JobSearch.Domain;
     using MediatR;
 
-    public class Request : AuthIdRequest, IRequest<RecruiterResponse>
+    public class Request : AuthIdRequest, IRequest<Response>
     {
     }
 
-    public class Handler : IRequestHandler<Request, RecruiterResponse>
+    public class Response
+    {
+    }
+
+    public class Handler : IRequestHandler<Request, Response>
     {
         private readonly IDbConnection _connection;
 
@@ -20,18 +24,25 @@
             _connection = connection;
         }
 
-        public Task<RecruiterResponse> Handle(Request request, CancellationToken cancellationToken)
+        public Task<Response> Handle(Request request, CancellationToken cancellationToken)
         {
             var id = request.GetId();
             var user = request.GetUser();
             var recruiter = _connection.GetById<Recruiter>(id);
+
+            if (recruiter == null)
+            {
+                throw new FileNotFoundException(string.Empty);
+            }
 
             if (recruiter.UserId != user.Id)
             {
                 throw new FileNotFoundException();
             }
 
-            return Task.Run(() => RecruiterResponse.MapFrom(recruiter));
+            _connection.Delete(recruiter);
+
+            return Task.Run(() => new Response(), cancellationToken);
         }
     }
 }

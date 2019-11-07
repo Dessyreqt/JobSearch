@@ -41,7 +41,8 @@
         [HttpGet("{id}")]
         public async Task<ActionResult<List<RecruiterResponse>>> GetRecruiter(int id)
         {
-            var request = new GetRecruiter.Request { Id = id };
+            var request = new GetRecruiter.Request();
+            request.SetId(id);
 
             return Ok(await _mediator.Send(request));
         }
@@ -70,6 +71,21 @@
             request.SetId(id);
 
             return Ok(await _mediator.Send(request));
+        }
+
+        /// <summary>
+        /// Deletes the recruiter with the specified <paramref name="id"/>.
+        /// </summary>
+        /// <param name="id">The id of the recruiter to delete.</param>
+        [HttpDelete("{id}")]
+        public async Task<ActionResult<List<RecruiterResponse>>> DeleteRecruiter(int id)
+        {
+            var request = new DeleteRecruiter.Request();
+            request.SetId(id);
+
+            await _mediator.Send(request);
+
+            return NoContent();
         }
     }
 }
