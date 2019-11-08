@@ -1,4 +1,4 @@
-﻿namespace JobSearch.Features.Recruiters.DeleteRecruiter
+﻿namespace JobSearch.Features.JobApplications.DeleteJobApplication
 {
     using System.Data;
     using System.IO;
@@ -28,19 +28,19 @@
         {
             var id = request.GetId();
             var user = request.GetUser();
-            var recruiter = _connection.GetById<Recruiter>(id);
+            var jobApplication = _connection.GetById<JobApplication>(id);
 
-            if (recruiter == null)
+            if (jobApplication == null)
             {
                 throw new FileNotFoundException();
             }
 
-            if (recruiter.UserId != user.Id)
+            if (jobApplication.UserId != user.Id)
             {
                 throw new FileNotFoundException();
             }
 
-            _connection.Delete(recruiter);
+            _connection.Delete(jobApplication);
 
             return Task.Run(() => new Response(), cancellationToken);
         }
