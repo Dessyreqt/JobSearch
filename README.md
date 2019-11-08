@@ -1,2 +1,2 @@
 # JobSearch
-WebApp to keep track of Job Search as well as provide a demostration of my code.
+WebApp to keep track of my Job Search as well as provide a demonstration of my code.
