@@ -17,6 +17,8 @@ properties {
 	$api_coverage_report_html_path = "$api_dir\CoverageReports\CoverageReport.html"
 	$api_coverage_report_xml_path = "$api_dir\CoverageReports\CoverageReport.xml"
 	$api_coverage_percent_minimum = 0
+	$api_app_pool_name = "jobsearchapi.dscarroll.com"
+	$api_publish_location = "C:\Sites\$api_app_pool_name"
 
 	$roundhouse_dir = "$base_dir\tools\roundhouse"
 	$roundhouse_exe_path = "$roundhouse_dir\rh.exe"
@@ -26,9 +28,6 @@ properties {
 
 	$db_object_dir = "$base_dir\tools\DbObject"
 	$db_object_exe_path = "$db_object_dir\DbObject.exe"
-
-	$deploy_app_pool_name = "jobsearchapi.dscarroll.com"
-	$deploy_publish_location = "C:\Sites\$deploy_app_pool_name"
 }
 
 #these tasks are for developers to run
@@ -86,10 +85,16 @@ task GenerateDbObjects {
 	exec { & $db_object_exe_path class --force --namespace "$api_name.Domain" --path "$api_project_dir\Domain" --connectionString "Server=$db_server;Database=$db_name;Integrated Security=true" }
 }
 
-task Deploy {
+task StopApiAppPool {
 	Stop-WebAppPool $deploy_app_pool_name
+}
+
+task DeployApi {
 	Push-Location $api_project_dir
-	exec { & dotnet publish -c Release -o $deploy_publish_location }
+	exec { & dotnet publish -c Release -o $api_publish_location }
 	Pop-Location
-	Start-WebAppPool $deploy_app_pool_name
+}
+
+task StartApiAppPool{
+	Start-WebAppPool $api_app_pool_name
 }

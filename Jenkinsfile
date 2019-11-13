@@ -32,7 +32,9 @@ pipeline {
 				branch 'master'
 			}
 			steps {
-				bat 'build Deploy'
+				bat 'build StopApiAppPool'
+				bat 'build DeployApi'
+				bat 'build StartApiAppPool'
 			}
 		}
 	}
