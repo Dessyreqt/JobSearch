@@ -26,5 +26,14 @@ pipeline {
 				bat 'build Tests'
 			}
 		}
+
+		stage('Deploy') {
+			when {
+				branch 'master'
+			}
+			steps {
+				bat 'build Deploy'
+			}
+		}
 	}
 }

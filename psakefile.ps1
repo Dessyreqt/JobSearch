@@ -26,6 +26,8 @@ properties {
 
 	$db_object_dir = "$base_dir\tools\DbObject"
 	$db_object_exe_path = "$db_object_dir\DbObject.exe"
+
+	$app_pool_name = "jobsearchapi.dscarroll.com"
 }
 
 #these tasks are for developers to run
@@ -81,4 +83,10 @@ task CICoverageReport {
 task GenerateDbObjects {
 	exec { & $db_object_exe_path baseclass --force --namespace "$api_name.Domain" --path "$api_project_dir\Domain" }
 	exec { & $db_object_exe_path class --force --namespace "$api_name.Domain" --path "$api_project_dir\Domain" --connectionString "Server=$db_server;Database=$db_name;Integrated Security=true" }
+}
+
+task Deploy {
+	Stop-WebAppPool $app_pool_name
+	exec { & dotnet publish -c Release -o "C:\Sites\$app_pool_name" }
+	Start-WebAppPool $app_pool_name
 }
