@@ -88,7 +88,7 @@ task GenerateDbObjects {
 
 task Deploy {
 	Stop-WebAppPool $deploy_app_pool_name
-	Push-Location $api_dir
+	Push-Location $api_project_dir
 	exec { & dotnet publish -c Release -o $deploy_publish_location }
 	Pop-Location
 	Start-WebAppPool $deploy_app_pool_name
