@@ -86,7 +86,7 @@ task GenerateDbObjects {
 }
 
 task StopApiAppPool {
-	Stop-WebAppPool $deploy_app_pool_name
+	Stop-WebAppPool $api_app_pool_name
 }
 
 task DeployApi {
