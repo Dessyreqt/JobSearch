@@ -27,7 +27,8 @@ properties {
 	$db_object_dir = "$base_dir\tools\DbObject"
 	$db_object_exe_path = "$db_object_dir\DbObject.exe"
 
-	$app_pool_name = "jobsearchapi.dscarroll.com"
+	$deploy_app_pool_name = "jobsearchapi.dscarroll.com"
+	$deploy_publish_location = "C:\Sites\$deploy_app_pool_name"
 }
 
 #these tasks are for developers to run
@@ -86,7 +87,7 @@ task GenerateDbObjects {
 }
 
 task Deploy {
-	Stop-WebAppPool $app_pool_name
-	exec { & dotnet publish -c Release -o "C:\Sites\$app_pool_name" }
-	Start-WebAppPool $app_pool_name
+	Stop-WebAppPool $deploy_app_pool_name
+	exec { & dotnet publish -c Release -o $deploy_publish_location }
+	Start-WebAppPool $deploy_app_pool_name
 }
