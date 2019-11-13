@@ -17,6 +17,6 @@
                 {
                     var env = webHostBuilderContext.HostingEnvironment;
                     configurationBuilder.SetBasePath(env.ContentRootPath).AddJsonFile("appsettings.local.json", true, true); // load local settings
-                }).ConfigureWebHostDefaults(webBuilder => { webBuilder.UseStartup<Startup>(); });
+                }).ConfigureWebHostDefaults(webBuilder => { webBuilder.CaptureStartupErrors(true).UseStartup<Startup>(); });
     }
 }
