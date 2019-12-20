@@ -1,5 +1,6 @@
 ﻿namespace JobSearch.Features.Recruiters.CreateRecruiter
 {
+    using System;
     using System.Data;
     using System.Threading;
     using System.Threading.Tasks;
@@ -26,19 +27,20 @@
 
     public class Handler : IRequestHandler<Request, RecruiterResponse>
     {
-        private readonly IDbConnection _connection;
+        private readonly Func<IDbConnection> _connectionFactory;
 
-        public Handler(IDbConnection connection)
+        public Handler(Func<IDbConnection> connectionFactory)
         {
-            _connection = connection;
+            _connectionFactory = connectionFactory;
         }
 
         public Task<RecruiterResponse> Handle(Request request, CancellationToken cancellationToken)
         {
             var user = request.GetUser();
             var recruiter = new Recruiter { UserId = user.Id, Name = request.Name, Phone = request.Phone, Email = request.Email };
+            using var connection = _connectionFactory();
 
-            _connection.Save(recruiter);
+            connection.Save(recruiter);
             return Task.Run(() => RecruiterResponse.MapFrom(recruiter), cancellationToken);
         }
     }

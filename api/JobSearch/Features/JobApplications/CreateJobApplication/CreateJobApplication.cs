@@ -30,11 +30,11 @@
 
     public class Handler : IRequestHandler<Request, JobApplicationResponse>
     {
-        private readonly IDbConnection _connection;
+        private readonly Func<IDbConnection> _connectionFactory;
 
-        public Handler(IDbConnection connection)
+        public Handler(Func<IDbConnection> connectionFactory)
         {
-            _connection = connection;
+            _connectionFactory = connectionFactory;
         }
 
         public Task<JobApplicationResponse> Handle(Request request, CancellationToken cancellationToken)
@@ -50,8 +50,9 @@
                 InitialContactDate = request.InitialContactDate,
                 JobDescriptionUrl = request.JobDescriptionUrl
             };
+            using var connection = _connectionFactory();
 
-            _connection.Save(jobApplication);
+            connection.Save(jobApplication);
             return Task.Run(() => JobApplicationResponse.MapFrom(jobApplication), cancellationToken);
         }
     }

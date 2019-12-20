@@ -107,7 +107,7 @@
 
             services.AddLogging(loggingBuilder => loggingBuilder.AddSerilog(dispose: true));
 
-            services.AddTransient<IDbConnection>(_ => new SqlConnection(configuration["ConnectionString"]));
+            services.AddTransient(_ => new Func<IDbConnection>(() => new SqlConnection(configuration["ConnectionString"])));
 
             services.ConfigureDapperConnectionProvider<SqlServerConnectionProvider>(configuration["ConnectionString"])
                 .ConfigureDapperIdentityCryptography(configuration.GetSection("DapperIdentityCryptography"))

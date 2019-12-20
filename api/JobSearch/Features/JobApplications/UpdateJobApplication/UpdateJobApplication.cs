@@ -31,18 +31,19 @@
 
     public class Handler : IRequestHandler<Request, JobApplicationResponse>
     {
-        private readonly IDbConnection _connection;
+        private readonly Func<IDbConnection> _connectionFactory;
 
-        public Handler(IDbConnection connection)
+        public Handler(Func<IDbConnection> connectionFactory)
         {
-            _connection = connection;
+            _connectionFactory = connectionFactory;
         }
 
         public Task<JobApplicationResponse> Handle(Request request, CancellationToken cancellationToken)
         {
             var user = request.GetUser();
             var id = request.GetId();
-            var jobApplication = _connection.GetById<JobApplication>(id);
+            using var connection = _connectionFactory();
+            var jobApplication = connection.GetById<JobApplication>(id);
 
             if (jobApplication.UserId != user.Id)
             {
@@ -56,7 +57,7 @@
             jobApplication.InitialContactDate = request.InitialContactDate;
             jobApplication.JobDescriptionUrl = request.JobDescriptionUrl;
 
-            _connection.Save(jobApplication);
+            connection.Save(jobApplication);
 
             return Task.Run(() => JobApplicationResponse.MapFrom(jobApplication), cancellationToken);
         }

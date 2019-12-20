@@ -140,7 +140,7 @@ namespace JobSearch
                 "Sendgrid API",
                 HealthStatus.Degraded);
 
-            services.AddTransient<IDbConnection>(_ => new SqlConnection(_configuration["ConnectionString"]));
+            services.AddTransient(_ => new Func<IDbConnection>(() => new SqlConnection(_configuration["ConnectionString"])));
             services.AddTransient<TokenGenerator>();
             services.AddTransient<IEmailSender, EmailSender>();
             services.AddTransient<IValidatorInterceptor, ValidatorInterceptor>();

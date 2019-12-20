@@ -26,19 +26,20 @@
 
     public class Handler : IRequestHandler<Request, FollowupResponse>
     {
-        private readonly IDbConnection _connection;
+        private readonly Func<IDbConnection> _connectionFactory;
 
-        public Handler(IDbConnection connection)
+        public Handler(Func<IDbConnection> connectionFactory)
         {
-            _connection = connection;
+            _connectionFactory = connectionFactory;
         }
 
         public Task<FollowupResponse> Handle(Request request, CancellationToken cancellationToken)
         {
             var user = request.GetUser();
             var followup = new Followup { UserId = user.Id, ActivityDate = request.ActivityDate, JobApplicationId = request.JobApplicationId, FollowupDescription = request.FollowupDescription };
+            using var connection = _connectionFactory();
 
-            _connection.Save(followup);
+            connection.Save(followup);
             return Task.Run(() => FollowupResponse.MapFrom(followup), cancellationToken);
         }
     }

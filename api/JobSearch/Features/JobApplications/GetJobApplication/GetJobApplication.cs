@@ -1,5 +1,6 @@
 ﻿namespace JobSearch.Features.JobApplications.GetJobApplication
 {
+    using System;
     using System.Data;
     using System.IO;
     using System.Threading;
@@ -13,18 +14,19 @@
 
     public class Handler : IRequestHandler<Request, JobApplicationResponse>
     {
-        private readonly IDbConnection _connection;
+        private readonly Func<IDbConnection> _connectionFactory;
 
-        public Handler(IDbConnection connection)
+        public Handler(Func<IDbConnection> connectionFactory)
         {
-            _connection = connection;
+            _connectionFactory = connectionFactory;
         }
 
         public Task<JobApplicationResponse> Handle(Request request, CancellationToken cancellationToken)
         {
             var id = request.GetId();
             var user = request.GetUser();
-            var jobApplication = _connection.GetById<JobApplication>(id);
+            using var connection = _connectionFactory();
+            var jobApplication = connection.GetById<JobApplication>(id);
 
             if (jobApplication.UserId != user.Id)
             {

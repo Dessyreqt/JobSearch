@@ -1,5 +1,6 @@
 ﻿namespace JobSearch.Features.Recruiters.DeleteRecruiter
 {
+    using System;
     using System.Data;
     using System.IO;
     using System.Threading;
@@ -17,18 +18,19 @@
 
     public class Handler : IRequestHandler<Request, Response>
     {
-        private readonly IDbConnection _connection;
+        private readonly Func<IDbConnection> _connectionFactory;
 
-        public Handler(IDbConnection connection)
+        public Handler(Func<IDbConnection> connectionFactory)
         {
-            _connection = connection;
+            _connectionFactory = connectionFactory;
         }
 
         public Task<Response> Handle(Request request, CancellationToken cancellationToken)
         {
             var id = request.GetId();
             var user = request.GetUser();
-            var recruiter = _connection.GetById<Recruiter>(id);
+            using var connection = _connectionFactory();
+            var recruiter = connection.GetById<Recruiter>(id);
 
             if (recruiter == null)
             {
@@ -40,7 +42,7 @@
                 throw new FileNotFoundException();
             }
 
-            _connection.Delete(recruiter);
+            connection.Delete(recruiter);
 
             return Task.Run(() => new Response(), cancellationToken);
         }

@@ -1,5 +1,6 @@
 ﻿namespace JobSearch.Features.Followups.GetFollowup
 {
+    using System;
     using System.Data;
     using System.IO;
     using System.Threading;
@@ -13,18 +14,19 @@
 
     public class Handler : IRequestHandler<Request, FollowupResponse>
     {
-        private readonly IDbConnection _connection;
+        private readonly Func<IDbConnection> _connectionFactory;
 
-        public Handler(IDbConnection connection)
+        public Handler(Func<IDbConnection> connectionFactory)
         {
-            _connection = connection;
+            _connectionFactory = connectionFactory;
         }
 
         public Task<FollowupResponse> Handle(Request request, CancellationToken cancellationToken)
         {
             var id = request.GetId();
             var user = request.GetUser();
-            var followup = _connection.GetById<Followup>(id);
+            using var connection = _connectionFactory();
+            var followup = connection.GetById<Followup>(id);
 
             if (followup.UserId != user.Id)
             {

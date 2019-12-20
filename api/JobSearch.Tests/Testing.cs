@@ -3,6 +3,7 @@
     using System;
     using System.Collections.Generic;
     using System.Data;
+    using System.Threading.Tasks;
     using Dapper;
     using MediatR;
 
@@ -25,6 +26,16 @@
 
             var mediator = Resolve<IMediator>();
             var result = mediator.Send(request).Result;
+            return result;
+        }
+
+        public static Task SendAsync<TResponse>(IRequest<TResponse> request, Action postContainerCreation = null)
+        {
+            CreateNewContainerAndDbContext();
+            postContainerCreation?.Invoke();
+
+            var mediator = Resolve<IMediator>();
+            var result = mediator.Send(request);
             return result;
         }
 
