@@ -41,7 +41,7 @@
 
         public static IEnumerable<TResult> Query<TResult>(string query, object parameters)
         {
-            var connection = Resolve<IDbConnection>();
+            var connection = Resolve<Func<IDbConnection>>()();
 
             var result = connection.Query<TResult>(query, parameters);
 
@@ -50,7 +50,7 @@
 
         public static TResult QueryFirst<TResult>(string query, object parameters)
         {
-            var connection = Resolve<IDbConnection>();
+            var connection = Resolve<Func<IDbConnection>>()();
 
             var result = connection.QueryFirst<TResult>(query, parameters);
 

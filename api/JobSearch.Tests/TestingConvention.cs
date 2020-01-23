@@ -1,5 +1,6 @@
 ﻿namespace JobSearch.Tests
 {
+    using System;
     using System.Data;
     using Fixie;
     using global::AutoFixture;
@@ -48,7 +49,7 @@
                 }
             };
 
-            checkpoint.Reset(TestDependencyScope.Resolve<IDbConnection>().ConnectionString).GetAwaiter().GetResult();
+            checkpoint.Reset(TestDependencyScope.Resolve<Func<IDbConnection>>()().ConnectionString).GetAwaiter().GetResult();
         }
     }
 }
