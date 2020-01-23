@@ -105,8 +105,8 @@ namespace JobSearch
                             new OpenApiInfo
                             {
                                 Version = "v1",
-                                Title = "Base API",
-                                Description = "This documentation provides information about the Base API.",
+                                Title = "JobSearch API",
+                                Description = "This documentation provides information about the JobSearch API.",
                                 Contact = new OpenApiContact { Name = "David Carroll", Url = new Uri("https://www.dscarroll.com/") }
                             });
 
